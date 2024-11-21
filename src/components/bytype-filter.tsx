@@ -5,26 +5,37 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { ChevronDown } from "lucide-react";
+import { Filter } from "lucide-react";
+import type { Type } from "../types";
+import { cn } from "@/lib/utils";
 
 type Props = {
-  disabled: boolean;
+  data: Type[];
+  currentValue: string;
+  handleChangeFilter: (value: string) => void;
 };
 
-function ByTypeFilter({ disabled }: Props) {
+function ByTypeFilter({ data, handleChangeFilter, currentValue }: Props) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild disabled={disabled}>
-        <Button variant="outline">
-          Sort by <ChevronDown className="ml-2 h-4 w-4" />
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="capitalize">
+          {currentValue || "Filter by"} <Filter className="ml-2 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>Name</DropdownMenuItem>
-        <DropdownMenuItem>HP</DropdownMenuItem>
-        <DropdownMenuItem>Attack</DropdownMenuItem>
-        <DropdownMenuItem>Defense</DropdownMenuItem>
-        <DropdownMenuItem>Speed</DropdownMenuItem>
+        {data.map(({ type }) => (
+          <DropdownMenuItem
+            className={cn(
+              "capitalize cursor-pointer",
+              currentValue === type.name && "bg-gray-100"
+            )}
+            key={type.id}
+            onClick={() => handleChangeFilter(type.name)}
+          >
+            {type.name}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

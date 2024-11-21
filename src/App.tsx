@@ -9,10 +9,28 @@ import { NoPokemon } from "./components/no-pokemon";
 import { Button } from "./components/ui/button";
 import { useEffect, useState } from "react";
 import _ from "lodash";
+import SortingButtons from "./components/sorting-buttons";
 
 function App() {
   const [limit, setLimit] = useState(10);
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("");
+  const [sorting, setSorting] = useState({
+    sortByName: "asc",
+    sortByStat: {
+      max: { base_stat: "desc" },
+    },
+  });
+
+  const handleChangeFilter = (value: string) => {
+    setFilter((prevState) => (prevState === value ? "" : value));
+  };
+
+  const handleChangeSorting = (data: object) => {
+    setSorting((prevState) => ({ ...prevState, ...data }));
+  };
+
+  console.log("sorting", sorting);
 
   const handleChangeSearch = _.debounce(
     (value: string) => setSearch(value),
@@ -20,9 +38,16 @@ function App() {
   );
 
   const { loading, data } = useQuery<Data>(GET_POKEMONS, {
-    variables: { limit, pokeName: search },
+    variables: {
+      limit,
+      pokeName: search,
+      pokemonType: filter,
+      sortByName: sorting.sortByName,
+      sortByStat: sorting.sortByStat,
+    },
   });
 
+  // whenever
   useEffect(() => {
     if (limit > 10) {
       window.scrollTo(0, document.body.scrollHeight);
@@ -42,7 +67,20 @@ function App() {
           disabled={!data}
         />
 
-        <ByTypeFilter disabled={!hasData} />
+        {data && (
+          <div className="flex justify-between">
+            <ByTypeFilter
+              data={data?.pokemonTypes}
+              handleChangeFilter={handleChangeFilter}
+              currentValue={filter}
+            />
+
+            <SortingButtons
+              handleChangeSorting={handleChangeSorting}
+              sorting={sorting}
+            />
+          </div>
+        )}
       </div>
 
       {loading && (
@@ -50,6 +88,7 @@ function App() {
           <Spinner />
         </div>
       )}
+
       {data && data.pokemons.length === 0 && <NoPokemon />}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

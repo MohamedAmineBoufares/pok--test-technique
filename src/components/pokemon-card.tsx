@@ -16,7 +16,7 @@ function PokemonCard({ name, stats, types }: Pokemon) {
   return (
     <Card className="w-80 hover:scale-105 duration-300 ease-in-out">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center capitalize">
+        <CardTitle className="text-xl font-bold text-center capitalize h-16">
           {name}
         </CardTitle>
       </CardHeader>
@@ -40,7 +40,7 @@ function PokemonCard({ name, stats, types }: Pokemon) {
               <Stat
                 key={state.name}
                 icon={<Icon.Component className={(cn("size-5"), Icon.color)} />}
-                name="HP"
+                name={state.name}
                 value={value}
               />
             );

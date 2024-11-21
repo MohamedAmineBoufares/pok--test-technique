@@ -7,10 +7,18 @@ export const GET_POKEMONS = gql`
     $stat: Int = 0
     $statName: String = ""
     $pokemonType: String = ""
+    $sortByName: order_by = asc
+    $sortByStat: pokemon_v2_pokemonstat_aggregate_order_by = {
+      max: { base_stat: desc }
+    }
   ) {
     pokemons: pokemon_v2_pokemon(
       limit: $limit
       offset: 0
+      order_by: {
+        name: $sortByName
+        pokemon_v2_pokemonstats_aggregate: $sortByStat
+      }
       where: {
         pokemon_v2_pokemonstats: {
           base_stat: { _gte: $stat }
@@ -46,7 +54,7 @@ export const GET_POKEMONS = gql`
       }
     }
 
-    pokemonTypes: pokemon_v2_pokemonformtype {
+    pokemonTypes: pokemon_v2_pokemonformtype(limit: 10) {
       type: pokemon_v2_type {
         name
         id
