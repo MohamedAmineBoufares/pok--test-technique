@@ -21,8 +21,8 @@ export const GET_POKEMONS = gql`
       }
       where: {
         pokemon_v2_pokemonstats: {
-          base_stat: { _gte: $stat }
           pokemon_v2_stat: { name: { _regex: $statName } }
+          base_stat: { _gte: $stat }
         }
         name: { _regex: $pokeName }
         pokemon_v2_pokemontypes: {
