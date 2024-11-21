@@ -1,50 +1,72 @@
-# React + TypeScript + Vite
+# **Pokémon Frontend + GraphQL**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A project to explore Pokémon data using a GraphQL API. This guide will walk you through setting up and running the project.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 **Tech Stack**
 
-## Expanding the ESLint configuration
+This project utilizes modern web technologies for a fast and responsive user experience:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### **Core Tools**
 
-- Configure the top-level `parserOptions` property like this:
+- **React**: For building dynamic and interactive user interfaces.
+- **Vite**: A lightning-fast build tool and development server.
+- **TailwindCSS**: For styling with a utility-first CSS framework.
+- **ShadCN**: For customizable and accessible UI components.
+- **GraphQL**: To fetch Pokémon data efficiently using structured queries.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### **Prerequisites**
+
+Make sure you have the following tools installed:
+
+- **Node.js**: _(v20.17.0)_
+- **Pnpm**: _(v9.12.2)_
+
+---
+
+## 🛠️ **Setup and Run the Project**
+
+Follow these steps to set up and run the development server:
+
+### 1. Clone the repository\*\*
+
+```bash
+git clone git@github.com:MohamedAmineBoufares/poke-test-technique.git
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 2. Navigate to the project folder
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+cd poke-test-technique
 ```
+
+### 3. Inside the cloned folder run the below command to install dependencies
+
+```bash
+pnpm i
+```
+
+### 4. After installation is complete, run the below command to run the dev server
+
+```bash
+pnpm start:local
+```
+
+### 5. You should be able to see the dev server on [localhos:3000](http://localhost:3000/)
+
+---
+
+## About `.env`
+
+The repo should include a `.env` file, if not, create it on the root of the project with this content
+
+```bash
+VITE_POKE_URL=https://beta.pokeapi.co/graphql/v1beta
+```
+
+---
+
+## 📬 Contact
+
+For questions or feedback, reach out to medamineboufares@gmail.com.
