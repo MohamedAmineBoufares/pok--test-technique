@@ -7,82 +7,26 @@ import ByTypeFilter from "./components/bytype-filter";
 import type { Data } from "@/types";
 import { NoPokemon } from "./components/no-pokemon";
 import { Button } from "./components/ui/button";
-import { useEffect, useState } from "react";
-import _ from "lodash";
+import { useEffect } from "react";
 import SortingButtons from "./components/sorting-buttons";
 import SearchByStat from "./components/search-bystat";
 import { RotateCcw } from "lucide-react";
+import useFilterHandlers from "./hooks/useFilterHandlers";
 
 function App() {
-  const [limit, setLimit] = useState(10);
-  const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState({
-    label: "",
-    value: "",
-  });
-  const [filter, setFilter] = useState("");
-  const [sorting, setSorting] = useState({
-    sortByName: "asc",
-    sortByStat: {
-      max: { base_stat: "desc" },
-    },
-  });
+  const { handlers, states } = useFilterHandlers();
 
-  /* 
-    this is used as a hack to reset the input value when clicking the reset button
-    if the key changes => input will rerender => resting his own value
-    I didn't opt for a value={search} approach, since I'm debouncing the search => the input will lag
-    => UNCONTROLLED INPUT
-    */
-  const [inputKey, setInputKey] = useState(1);
+  const {
+    handleChangeFilter,
+    handleChangeSearch,
+    handleChangeSearchBy,
+    handleChangeSearchByValue,
+    handleChangeSorting,
+    handleResetFilters,
+    handleIncLimit,
+  } = handlers;
 
-  const handleChangeFilter = (value: string) => {
-    setFilter((prevState) => (prevState === value ? "" : value));
-  };
-
-  const handleChangeSorting = (data: object) => {
-    setSorting((prevState) => ({ ...prevState, ...data }));
-  };
-
-  const handleChangeSearchBy = (name: "label" | "value", value: string) => {
-    if (name === "label") {
-      setSearchBy((prevState) =>
-        searchBy.label === value
-          ? { label: "", value: "" }
-          : {
-              ...prevState,
-              label: value,
-            }
-      );
-    }
-  };
-
-  const handleChangeSearchByValue = _.debounce(
-    (value: string) => setSearchBy((prevState) => ({ ...prevState, value })),
-    500
-  );
-
-  const handleResetFilters = () => {
-    setInputKey((prevState) => (prevState += 1));
-    setLimit(() => 10);
-    setSearch(() => "");
-    setSearchBy(() => ({
-      label: "",
-      value: "",
-    }));
-    setFilter(() => "");
-    setSorting(() => ({
-      sortByName: "asc",
-      sortByStat: {
-        max: { base_stat: "desc" },
-      },
-    }));
-  };
-
-  const handleChangeSearch = _.debounce(
-    (value: string) => setSearch(value),
-    500
-  );
+  const { filter, inputKey, limit, search, searchBy, sorting } = states;
 
   const { loading, data } = useQuery<Data>(GET_POKEMONS, {
     variables: {
@@ -186,10 +130,7 @@ function App() {
 
       {hasData && !search && (
         <div className="mt-5 flex justify-center">
-          <Button
-            disabled={loading}
-            onClick={() => setLimit((prevState) => (prevState += 10))}
-          >
+          <Button disabled={loading} onClick={handleIncLimit}>
             Load 10 more
             {loading && <Spinner />}
           </Button>
